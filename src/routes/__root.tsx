@@ -1,0 +1,21 @@
+import { HeadContent, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
+
+export const Route = createRootRoute({
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Bridge strikes & trade routes map" },
+    ],
+    links: [{ rel: "icon", href: "/icon.svg" }],
+  }),
+  component: () => (
+    <html lang="en">
+      <head><HeadContent /></head>
+      <body style={{ margin: 0 }}>
+        <Outlet />
+        <Scripts />
+      </body>
+    </html>
+  ),
+});

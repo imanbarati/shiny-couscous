@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "note": "Civilian trade infrastructure only. Hand-seeded, approximate coordinates; corridors are schematic lines, not surveyed routes. Refresh from OpenStreetMap (see README).",
+    "article_context": "Trade facts below are from the Iran International article; positions are approximate."
+  },
+  "ports": [
+    {"name_en":"Shahid Rajaee / Bandar Abbas","name_fa":"شهید رجایی / بندرعباس","lat":27.1,"lng":56.07,"note_en":"Largest container port; rail-connected.","note_fa":"بزرگ‌ترین بندر کانتینری؛ متصل به راه‌آهن."},
+    {"name_en":"Imam Khomeini Port","name_fa":"بندر امام خمینی","lat":30.43,"lng":49.07,"note_en":"Largest bulk port.","note_fa":"بزرگ‌ترین بندر فله."},
+    {"name_en":"Amirabad","name_fa":"بندر امیرآباد","lat":36.8,"lng":53.4,"note_en":"Largest Caspian port; major for Russia trade.","note_fa":"بزرگ‌ترین بندر کاسپین؛ مهم برای تجارت با روسیه."},
+    {"name_en":"Chabahar","name_fa":"چابهار","lat":25.29,"lng":60.64,"note_en":"Southeast coast port.","note_fa":"بندر ساحل جنوب‌شرق."}
+  ],
+  "borders": [
+    {"name_en":"Sarakhs","name_fa":"سرخس","lat":36.54,"lng":61.16,"note_en":"Rail and road route from Kazakhstan and China.","note_fa":"مسیر ریلی و جاده‌ای از قزاقستان و چین."},
+    {"name_en":"Razi","name_fa":"رازی","lat":38.4,"lng":44.4,"note_en":"Link to Turkey; rail trade reported up 300% in four months of 1405.","note_fa":"اتصال به ترکیه؛ رشد ۳۰۰ درصدی تجارت ریلی در چهار ماه اول ۱۴۰۵."},
+    {"name_en":"Jolfa","name_fa":"جلفا","lat":38.95,"lng":45.63,"note_en":"Once major, now less important than Razi.","note_fa":"پیش‌تر مهم بود، اکنون کم‌اهمیت‌تر از رازی."},
+    {"name_en":"Shalamcheh","name_fa":"شلمچه","lat":30.48,"lng":48.17,"note_en":"Rail link to Iraq.","note_fa":"اتصال ریلی به عراق."},
+    {"name_en":"Mirjaveh","name_fa":"میرجاوه","lat":29.0,"lng":61.45,"note_en":"Rail link to Pakistan.","note_fa":"اتصال ریلی به پاکستان."},
+    {"name_en":"Milak / Shamtigh area","name_fa":"منطقه شمتیغ","lat":30.9,"lng":61.8,"note_en":"Rail link toward Afghanistan.","note_fa":"اتصال ریلی به سمت افغانستان."},
+    {"name_en":"Remdan","name_fa":"ریمدان","lat":26.9,"lng":62.5,"note_en":"Goods from Pakistan's Gwadar arrive here, mostly by road.","note_fa":"کالا از گوادر پاکستان، بیشتر جاده‌ای."}
+  ],
+  "corridors": [
+    {"name_en":"Bandar Abbas to Tehran (rail and road)","name_fa":"بندرعباس تا تهران","pts":[[27.1,56.07],[29.6,52.5],[32.65,51.67],[35.69,51.39]]},
+    {"name_en":"Caspian: Amirabad to Tehran","name_fa":"کاسپین: امیرآباد تا تهران","pts":[[36.8,53.4],[36.55,53.05],[35.69,51.39]]},
+    {"name_en":"Central Asia: Sarakhs to Tehran","name_fa":"آسیای میانه: سرخس تا تهران","pts":[[36.54,61.16],[36.3,59.6],[36.2,57.7],[35.69,51.39]]},
+    {"name_en":"Turkey: Razi to Tehran","name_fa":"ترکیه: رازی تا تهران","pts":[[38.4,44.4],[38.08,46.3],[36.67,48.5],[35.69,51.39]]},
+    {"name_en":"Gulf: Imam Khomeini to Tehran","name_fa":"خلیج فارس: امام خمینی تا تهران","pts":[[30.43,49.07],[31.32,48.67],[33.5,48.35],[34.6,50.9],[35.69,51.39]]}
+  ]
+}
