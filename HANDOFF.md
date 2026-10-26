@@ -33,4 +33,4 @@ Last updated: 2026-10-26. Owner: Iman (reads Persian and English).
 5. Pin the `latest` dependency ranges in package.json to exact versions after the first green deploy.
 
 ## Verify
-`vite build` and the wrangler dry run only prove the project bundles; they do not prove the Cloudflare account, token or live site work.
+`npm run typecheck` and `npm run build` are enforced by GitHub Actions. A successful build does not prove the Cloudflare account, token or live site work; check the Actions run and open the deployed URL before claiming deployment success.
