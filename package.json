@@ -6,7 +6,8 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-router": "latest",
