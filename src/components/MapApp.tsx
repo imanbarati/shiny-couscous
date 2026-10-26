@@ -27,6 +27,9 @@ export default function MapApp() {
   const [sel, setSel] = useState<string | null>(null);
   const [active, setActive] = useState(store.layers[0]?.id ?? "");
   const [msg, setMsg] = useState("");
+  const [search, setSearch] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const file = useRef<HTMLInputElement>(null);
   const { layers, feats } = store;
   const t = (en: string, fa: string) => (lang === "fa" ? fa : en);
@@ -36,6 +39,18 @@ export default function MapApp() {
 
   const layerById = useMemo(() => Object.fromEntries(layers.map((l) => [l.id, l])), [layers]);
   const selected = feats.find((f) => f.id === sel);
+  const filteredFeats = useMemo(() => {
+    const q = search.trim().toLocaleLowerCase();
+    return feats.filter((f) => {
+      const l = layerById[f.layerId];
+      if (!l?.visible) return false;
+      const text = [f.name_en, f.name_fa, f.note_en, f.note_fa, l.name_en, l.name_fa].join(" ").toLocaleLowerCase();
+      if (q && !text.includes(q)) return false;
+      if (fromDate && (!f.date || f.date < fromDate)) return false;
+      if (toDate && (!f.date || f.date > toDate)) return false;
+      return true;
+    });
+  }, [feats, layerById, search, fromDate, toDate]);
   const setLayers = (fn: (l: Layer[]) => Layer[]) => setStore((s) => ({ ...s, layers: fn(s.layers) }));
   const setFeats = (fn: (f: Feat[]) => Feat[]) => setStore((s) => ({ ...s, feats: fn(s.feats) }));
   const patch = (id: string, p: Partial<Feat>) => setFeats((fs) => fs.map((f) => (f.id === id ? { ...f, ...p } : f)));
@@ -68,7 +83,7 @@ export default function MapApp() {
   }
 
   const css = `.app{display:flex;height:100dvh;font:14px system-ui,sans-serif}.side{width:340px;overflow:auto;padding:10px;border-inline-end:1px solid #ddd;background:#fafafa}
-  .map{flex:1}.row{display:flex;gap:6px;align-items:center;margin:4px 0;flex-wrap:wrap}button,select,input,textarea{font:inherit}button{padding:4px 8px;cursor:pointer}
+  .map{flex:1}.row{display:flex;gap:6px;align-items:center;margin:4px 0;flex-wrap:wrap}.results{max-height:180px;overflow:auto;border:1px solid #ddd;border-radius:6px}.result{display:block;width:100%;text-align:start;border:0;border-bottom:1px solid #eee;background:white;padding:7px}.result[aria-pressed="true"]{background:#e8eefc;outline:2px solid #5974c8}button,select,input,textarea{font:inherit}button{padding:4px 8px;cursor:pointer}
   textarea,input[type=text],input[type=date]{width:100%;box-sizing:border-box}h4{margin:12px 0 4px}.on{background:#222;color:#fff}
   @media(max-width:700px){.app{flex-direction:column-reverse}.side{width:auto;height:45dvh;border:0}.map{height:55dvh;flex:none}}`;
 
@@ -94,6 +109,19 @@ export default function MapApp() {
           </div>
         ))}
         <button onClick={() => { const n = prompt(t("New layer name", "نام لایه جدید")); if (n) { const l = { id: uid(), name_en: n, name_fa: "", color: "#7b1fa2", visible: true }; setLayers((ls) => [...ls, l]); setActive(l.id); } }}>+ {t("Layer", "لایه")}</button>
+
+        <h4>{t("Find features", "جست‌وجوی عارضه‌ها")} ({filteredFeats.length})</h4>
+        <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t("Search names, notes and layers…", "جست‌وجو در نام، توضیحات و لایه‌ها…")} aria-label={t("Search map features", "جست‌وجوی عارضه‌های نقشه")} />
+        <div className="row">
+          <label style={{ flex: 1 }}>{t("From", "از")}<input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} /></label>
+          <label style={{ flex: 1 }}>{t("To", "تا")}<input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} /></label>
+          <button onClick={() => { setSearch(""); setFromDate(""); setToDate(""); }}>{t("Clear filters", "پاک‌کردن فیلترها")}</button>
+        </div>
+        <div className="results" role="list" aria-label={t("Matching map features", "عارضه‌های منطبق")}>
+          {filteredFeats.slice(0, 100).map((f) => <button className="result" role="listitem" key={f.id} aria-pressed={sel === f.id} onClick={() => setSel(f.id)}>{nm(f)}<small style={{ display: "block", color: "#666" }}>{layerById[f.layerId]?.[lang === "fa" ? "name_fa" : "name_en"] || ""}{f.date ? ` · ${f.date}` : ""}</small></button>)}
+          {filteredFeats.length === 0 && <div style={{ padding: 8, color: "#666" }}>{t("No matching features.", "عارضه‌ای پیدا نشد.")}</div>}
+          {filteredFeats.length > 100 && <div style={{ padding: 8, color: "#666" }}>{t("Showing the first 100 matches. Refine your search.", "۱۰۰ نتیجه نخست نمایش داده می‌شود؛ جست‌وجو را دقیق‌تر کنید.")}</div>}
+        </div>
 
         <h4>{t("Edit", "ویرایش")}</h4>
         <div className="row">
@@ -130,9 +158,9 @@ export default function MapApp() {
       <MapContainer className="map" center={[32.5, 53.5]} zoom={5} style={{ flex: 1 }}>
         <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Clicks mode={mode} onPt={onMapPt} />
-        {feats.map((f) => {
+        {filteredFeats.map((f) => {
           const l = layerById[f.layerId];
-          if (!l?.visible) return null;
+          if (!l) return null;
           const isSel = f.id === sel;
           const popup = <Popup><b>{nm(f)}</b>{f.date && <div>{f.date}</div>}<div>{(lang === "fa" && f.note_fa) || f.note_en}</div></Popup>;
           return f.pts.length === 1 ? (
